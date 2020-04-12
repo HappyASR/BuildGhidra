@@ -55,7 +55,10 @@ jobs:
       run: git clone https://github.com/NationalSecurityAgency/ghidra
 
     - name: config
-      run: echo "org.gradle.parallel=true" >> ~/.gradle/gradle.properties
+      run: |
+        mkdir -p  ~/.gradle
+        echo "org.gradle.parallel=true" >> ~/.gradle/gradle.properties
+        cat ~/.gradle/gradle.properties
 
     - name: init
       run: cd ghidra && gradle --init-script gradle/support/fetchDependencies.gradle init
