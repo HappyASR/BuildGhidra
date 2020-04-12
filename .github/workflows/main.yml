@@ -64,7 +64,7 @@ jobs:
       run: cd ghidra && gradle buildGhidra -PallPlatforms
 
     - name: rename
-      run: cd ghidra/build && mv $(ls *.zip) ghidra.zip
+      run: cd ghidra/build/dist && mv $(ls *.zip) ghidra.zip
 
     - name: Deploy
       uses: WebFreak001/deploy-nightly@v1.0.1
