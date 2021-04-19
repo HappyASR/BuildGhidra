@@ -47,7 +47,8 @@ jobs:
         sudo apt-get install -y openjdk-11-jdk
 
     - name: export java
-      env: ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
       run: |
         export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/
         echo "::set-env name=JAVA_HOME::$JAVA_HOME"
