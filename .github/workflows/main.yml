@@ -22,6 +22,8 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
+        with:
+          repository: NationalSecurityAgency/Ghidra
 
     # Runs a single command using the runners shell
     - name: update
@@ -41,30 +43,27 @@ jobs:
         xvfb
 
     - name: install java
-      run: |
-        sudo add-apt-repository ppa:openjdk-r/ppa -y
-        sudo apt-get update
-        sudo apt-get install -y openjdk-11-jdk
-
-    - name: export java
-      env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-      run: |
-        export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/
-        echo "::set-env name=JAVA_HOME::$JAVA_HOME"
-        ls /usr/lib/jvm/java-11-openjdk-amd64/
-
-    - name: clone
-      run: git clone https://github.com/NationalSecurityAgency/ghidra
+      uses: actions/setup-java@v1
+        with:
+          java-version: 11
 
     - name: init
-      run: cd ghidra && gradle --init-script gradle/support/fetchDependencies.gradle init
+      uses: eskatos/gradle-command-action@v1
+        with:
+          gradle-version: 6.8.3
+          arguments: --init-script gradle/support/fetchDependencies.gradle init
 
     - name: yajswDevUnpack
-      run: cd ghidra && gradle yajswDevUnpack
+      uses: eskatos/gradle-command-action@v1
+        with:
+          gradle-version: 6.8.3
+          arguments: yajswDevUnpack
 
     - name: buildGhidra
-      run: cd ghidra && gradle buildGhidra -PallPlatforms
+      uses: eskatos/gradle-command-action@v1
+        with:
+          gradle-version: 6.8.3
+          arguments: buildGhidra -PallPlatforms
 
     - name: rename
       run: cd ghidra/build/dist && mv $(ls *.zip) ghidra.zip
