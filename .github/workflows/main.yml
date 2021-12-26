@@ -1,4 +1,4 @@
-# 20210419
+# 20211226
 # This is a basic workflow to help you get started with Actions
 
 name: CI
@@ -53,6 +53,15 @@ jobs:
         gradle-version: 6.8.3
         arguments: --init-script gradle/support/fetchDependencies.gradle init
 
+    - name: Checkout ghidra-data
+      uses: actions/checkout@v2
+      with:
+        repository: NationalSecurityAgency/ghidra-data
+        path: 'ghidra-data'
+
+    - name: Copy ghidra-data files into the appropriate directories
+      run: cp -r ghidra-data/FunctionID/* Ghidra/Features/FunctionID/data
+
     - name: yajswDevUnpack
       uses: eskatos/gradle-command-action@v1
       with:
@@ -63,7 +72,7 @@ jobs:
       uses: eskatos/gradle-command-action@v1
       with:
         gradle-version: 6.8.3
-        arguments: buildGhidra -PallPlatforms
+        arguments: =x ip -PallPlatforms buildGhidra
 
     - name: rename
       run: cd build/dist && mv $(ls *.zip) ghidra.zip
